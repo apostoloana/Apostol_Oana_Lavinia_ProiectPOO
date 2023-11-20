@@ -5,8 +5,8 @@ using namespace std;
 
 class Biblioteca {
 private:
-	char* numeBiblioteca;
 	const int anInfiintare;
+	char* numeBiblioteca;
 	string adresa;
 	int nrAngajati;
 	float suprafata;
@@ -106,7 +106,7 @@ public:
 	Biblioteca(const Biblioteca &b) : anInfiintare(b.anInfiintare)
 	{
 		if (b.numeBiblioteca != NULL) {
-			this->numeBiblioteca = new char(strlen(b.numeBiblioteca)+1);
+			this->numeBiblioteca = new char[strlen(b.numeBiblioteca) + 1];
 			strcpy_s(this->numeBiblioteca, strlen(b.numeBiblioteca) + 1, b.numeBiblioteca);
 		}
 		else {
@@ -143,6 +143,7 @@ public:
 int Biblioteca::nrTotalCarti = 400;
 
 void afisareInfoBiblioteca(const Biblioteca& bib) {
+	cout << "Functie globala: " << endl;
 	cout << "Informatii biblioteca: " << bib.numeBiblioteca << " - Nr Angajati: " << bib.nrAngajati;
 }
 
@@ -159,6 +160,77 @@ private:
 	static float TVA;
 
 public:
+	//get si set
+	char* getNumeC() {
+		return numeCarte;
+	}
+
+	void setNumeC(char* numeCNou) {
+		if (strlen(numeCNou) > 2) {
+			delete[] numeCarte;
+			numeCarte = new char[strlen(numeCNou) + 1];
+			strcpy_s(numeCarte, strlen(numeCNou) + 1, numeCNou);
+		}
+	}
+
+	string getNumeAutor() {
+		return numeAutor;
+	}
+
+	void setNumeAutor(string numeAutorNou) {
+		if (numeAutor.length() > 2) {
+			this->numeAutor = numeAutorNou;
+		}
+	}
+
+	float getPretCarte() {
+		return pretCarte;
+	}
+
+	void setPretCarte(float pretNouCarte) {
+		this->pretCarte = pretNouCarte;
+	}
+
+	string getEditura() {
+		return editura;
+	}
+
+	void setEditura(string edituraNoua) {
+		if (editura.length() > 2) {
+			this->editura = edituraNoua;
+		}
+	}
+
+	bool getDisponibilitate() {
+		return disponibila;
+	}
+
+	void setDisponibilitate(bool dispNoua) {
+		this->disponibila = dispNoua;
+	}
+
+	int getNrPag() {
+		return nrPagini;
+	}
+
+	void setNrPag(int nrNouPag) {
+		this->nrPagini = nrNouPag;
+	}
+
+	static float getTVA() {
+		return TVA;
+	}
+
+	void setTVA(static float nouTVA) {
+		if (nouTVA >= 0 && nouTVA <= 100) {
+			this->TVA = nouTVA;
+		}
+		else {
+			cerr << "Eroare: Valoare TVA invalida." << endl;
+		}
+		
+	}
+
 	//constr f param
 	Carte() :idCarte(1) {
 		numeCarte = new char[strlen("Carte1") + 1];
@@ -242,6 +314,56 @@ private:
 	static int nrAngajati;
 
 public:
+	//get si set
+	char* getNume() {
+		return this->nume;
+	}
+
+	void setNume(char* numeNou) {
+		if (strlen(numeNou) > 2) {
+			delete[]this->nume;
+			nume = new char[strlen(numeNou) + 1];
+			strcpy_s(nume, strlen(numeNou) + 1, numeNou);
+		}
+	}
+
+	int getVarsta(){
+		return this->varsta;
+	}
+	void setVarsta(int varstaNoua) {
+		this->varsta = varstaNoua;
+	}
+	int getSalariu() {
+		return this->salariu;
+	}
+	void setSalariu(int salariuNou) {
+		this->salariu = salariuNou;
+	}
+	string getFunctie() {
+		if (functie.length() > 2) {
+			return this->functie;
+		}
+	}
+	void setFunctie(string functieNoua){
+		if (functie.length() > 2) {
+			this->functie = functieNoua;
+		}
+	}
+
+	bool getFullTime() {
+		return fullTime;
+	}
+	void setFullTime(bool timeNou) {
+		this->fullTime = timeNou;
+	}
+
+	static int getNrAng() {
+		return nrAngajati;
+	}
+	void setNrAng(static int nrNouAng) {
+		this->nrAngajati = nrNouAng;
+	}
+
 	//constr f param
 	Angajat():idAngajat(nrAngajati++){
 		nume = new char[strlen("Anonim") + 1];
@@ -314,16 +436,26 @@ void main() {
 	Biblioteca b1;
 	cout << b1 << endl;
 
-	Biblioteca b2("Biblioteca1", 1995, 5);
+	Biblioteca b2("Biblioteca2", 1995, 5);
 	cout << b2 << endl;
 
-	Biblioteca b3("Biblioteca2", "Bucuresti, Sector3", 50.0F, true);
+	Biblioteca b3("Biblioteca3", "Bucuresti, Sector3", 50.0F, true);
 	cout << b3 << endl;
 
 	cout << endl << "--------Faza2---------" << endl;
+	Biblioteca b4 = b3;
+	cout << b4 << endl;
+
+	afisareInfoBiblioteca(b2);
+
+	cout << endl << "GET & SET: ";
+	cout << endl << "Adresa lui b3: " << b3.getAdresa();
+	b4.setNumeB("Humanitas");
+	cout << endl << "Noul nume al lui b4: " << b4.getNumeB();
 
 
-	cout << "-------------------CARTE-----------------------" << endl;
+
+	cout << "\n-------------------CARTE-----------------------" << endl;
 	cout << "--------Faza1---------" << endl;
 	Carte c1;
 	cout << c1 << endl;
@@ -334,9 +466,19 @@ void main() {
 
 	cout << endl << "--------Faza2---------" << endl;
 
+	Carte c4 = c3;
+	cout << c4 << endl;
+
+	cout << endl << "GET & SET: ";
+	cout << endl << "Pretul lui c2: " << c2.getPretCarte();
+	c3.setTVA(0.2F);
+	cout << endl << "c3 - TVA: " << c3.getTVA();
 
 
-	cout << "-------------------ANGAJATI--------------------" << endl;
+
+
+
+	cout << "\n-------------------ANGAJATI--------------------" << endl;
 	cout << "--------Faza1---------" << endl;
 	Angajat a1;
 	cout << a1 << endl;
@@ -348,6 +490,15 @@ void main() {
 	cout << a3 << endl;
 
 	cout << endl << "--------Faza2---------" << endl;
+
+	Angajat a4 = a3;
+	cout << a4;
+
+	cout << endl << "GET & SET: ";
+	
+	cout << endl << "Functia angajatului a4 - " << a4.getFunctie();
+	a2.setSalariu(4500);
+	cout << endl << "Noul salariu al lui a2: " << a2.getSalariu();
 
 
 
