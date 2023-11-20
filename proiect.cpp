@@ -118,6 +118,22 @@ public:
 		this->deschisaInWeekend = b.deschisaInWeekend;
 	}
 
+	Biblioteca operator=(const Biblioteca& b) {
+		if (this != &b) {
+			if (this->numeBiblioteca != NULL) {
+				delete[]this->numeBiblioteca;
+			}
+			this->numeBiblioteca = new char[strlen(b.numeBiblioteca) + 1];
+			strcpy_s(this->numeBiblioteca, strlen(b.numeBiblioteca) + 1, b.numeBiblioteca);
+			this->adresa = b.adresa;
+			this->nrAngajati = b.nrAngajati;
+			this->suprafata = b.suprafata;
+			this->deschisaInWeekend = b.deschisaInWeekend;	
+		}
+		return *this;
+	}
+
+
 	friend ostream& operator<<(ostream& ost, const Biblioteca& bib) {
 		ost << "Denumire: " << bib.numeBiblioteca << endl;
 		ost << "An Infiintare: " << bib.anInfiintare << endl;
@@ -281,6 +297,22 @@ public:
 		this->nrPagini = c.nrPagini;
 	}
 
+	Carte operator=(const Carte& c) {
+		if (this != &c) {
+			if (this->numeCarte != NULL) {
+				delete[]this->numeCarte;
+			}
+			this->numeCarte = new char[strlen(c.numeCarte) + 1];
+			strcpy_s(this->numeCarte, strlen(c.numeCarte) + 1, c.numeCarte);
+			this->numeAutor = c.numeAutor;
+			this->pretCarte = c.pretCarte;
+			this->editura = c.editura;
+			this->disponibila = c.disponibila;
+			this->nrPagini = c.nrPagini;
+		}
+		return *this;
+	}
+
 	friend ostream& operator<<(ostream& ost, const Carte& c) {
 		ost << "Id Carte: " << c.idCarte << endl;
 		ost << "Nume Carte: " << c.numeCarte << endl;
@@ -410,6 +442,23 @@ public:
 		this->fullTime = a.fullTime;
 	}
 
+	//op=
+	Angajat operator=(const Angajat& a) {
+		if (this != &a) {
+			if (this->nume != NULL) {
+				delete[]this->nume;
+				
+			}
+			this->nume = new char[strlen(a.nume) + 1];
+			strcpy_s(this->nume, strlen(a.nume) + 1, a.nume);
+			this->varsta = a.varsta;
+			this->salariu = a.salariu;
+			this->functie = a.functie;
+			this->fullTime = a.fullTime;
+		}
+		return *this;
+	}
+
 	friend ostream& operator<<(ostream& ost, const Angajat& a) {
 		ost << "Id Angajat: " << a.idAngajat << endl;
 		ost << "Nume: " << a.nume << endl;
@@ -453,6 +502,12 @@ void main() {
 	b4.setNumeB("Humanitas");
 	cout << endl << "Noul nume al lui b4: " << b4.getNumeB();
 
+	cout << endl << "--------Faza3---------" << endl;
+	Biblioteca b5("Biblioteca5", "Bucuresti, Sector2", 29.0F, true);
+	Biblioteca b7("Biblioteca6", 1990, 4);
+	b7 = b5;
+	cout << endl << b7;
+
 
 
 	cout << "\n-------------------CARTE-----------------------" << endl;
@@ -475,6 +530,7 @@ void main() {
 	cout << endl << "c3 - TVA: " << c3.getTVA();
 
 
+	cout << endl << "--------Faza3---------" << endl;
 
 
 
@@ -500,6 +556,7 @@ void main() {
 	a2.setSalariu(4500);
 	cout << endl << "Noul salariu al lui a2: " << a2.getSalariu();
 
+	cout << endl << "--------Faza3---------" << endl;
 
 
 }
