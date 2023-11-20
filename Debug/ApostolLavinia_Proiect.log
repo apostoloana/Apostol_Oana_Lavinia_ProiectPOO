@@ -1,0 +1,6 @@
+﻿  proiect.cpp
+c:\desktop2\an supl\poo - sem\proiect\apostollavinia_proiect\apostollavinia_proiect\proiect.cpp(69): warning C4042: 'nrNouCarti': has bad storage class
+c:\desktop2\an supl\poo - sem\proiect\apostollavinia_proiect\apostollavinia_proiect\proiect.cpp(109): warning C4267: 'initializing': conversion from 'size_t' to 'char', possible loss of data
+c:\desktop2\an supl\poo - sem\proiect\apostollavinia_proiect\apostollavinia_proiect\proiect.cpp(242): warning C4305: 'initializing': truncation from 'double' to 'float'
+c:\desktop2\an supl\poo - sem\proiect\apostollavinia_proiect\apostollavinia_proiect\proiect.cpp(322): warning C4326: return type of 'main' should be 'int' instead of 'void'
+  ApostolLavinia_Proiect.vcxproj -> C:\DESKTOP2\An supl\POO - SEM\Proiect\ApostolLavinia_Proiect\Debug\ApostolLavinia_Proiect.exe
