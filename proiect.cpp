@@ -1,4 +1,5 @@
 #include<iostream>
+#include<cstdlib>
 #include<string>
 
 using namespace std;
@@ -6,35 +7,22 @@ using namespace std;
 class Biblioteca {
 private:
 	const int anInfiintare;
-	char* numeBiblioteca;
-	string adresa;
+	string numeBiblioteca;
 	int nrAngajati;
-	float suprafata;
+	int* varsteAngajati;
 	bool deschisaInWeekend;
 	static int nrTotalCarti;
 
 public:
 
 	//get si set
-	char* getNumeB() {
+	string getNumeB() {
 		return numeBiblioteca;
 	}
 
-	void setNumeB(const char* numeBNou) {
-		if (strlen(numeBNou) > 2) {
-			delete[] numeBiblioteca;
-			numeBiblioteca = new char[strlen(numeBNou) + 1];
-			strcpy_s(numeBiblioteca, strlen(numeBNou) + 1, numeBNou);
-		}
-	}
-
-	string getAdresa() {
-		return this->adresa;
-	}
-
-	void setAdresa(string adresa) {
-		if (adresa.length() > 2) {
-			this->adresa = adresa;
+	void setNumeB(string numeBNou) {
+		if (numeBiblioteca.length() > 2) {
+			this->numeBiblioteca = numeBNou;
 		}
 	}
 
@@ -46,13 +34,10 @@ public:
 		this->nrAngajati = nrNAng;
 	}
 
-	float getSuprafata() {
-		return this->suprafata;
+	int* getVarsteAng() {
+		return this->varsteAngajati;
 	}
 
-	void setSuprafata(float suprafataNoua) {
-		this->suprafata = suprafataNoua;
-	}
 
 	bool getisOpenWK() {
 		return this->deschisaInWeekend;
@@ -74,73 +59,90 @@ public:
 	//constr f param
 	Biblioteca() : anInfiintare(1990)
 	{
-		numeBiblioteca = new char[strlen("Biblioteca") + 1];
-		strcpy_s(numeBiblioteca, strlen("Biblioteca") + 1, "Biblioteca");
-		adresa = "Necunoscut";
-		nrAngajati = 10;
-		suprafata = 0;
-		deschisaInWeekend = false;
-	}
-
-	//constr cu p
-	Biblioteca(const char* numeBiblioteca, const int an, int nrAngajati) :anInfiintare(an) {
-		this->numeBiblioteca = new char[strlen(numeBiblioteca) + 1];
-		strcpy_s(this->numeBiblioteca, strlen(numeBiblioteca) + 1, numeBiblioteca);
-		this->adresa = "Necunoscuta";
-		this->nrAngajati = nrAngajati;
-		this->suprafata = 0;
+		this->numeBiblioteca = "Necunoscut";
+		this->nrAngajati = 10;
+		this->varsteAngajati = new int[this->nrAngajati];
+		for (int i = 0; i < this->nrAngajati; i++) {
+			this->varsteAngajati[i] = rand() % 31 + 20;
+		}
 		this->deschisaInWeekend = false;
 	}
 
 	//constr
-	Biblioteca(const char* numeB, string adresa, float suprafata, bool openWK) : anInfiintare(1990) {
-		this->numeBiblioteca = new char[strlen(numeB) + 1];
-		strcpy_s(this->numeBiblioteca, strlen(numeB) + 1, numeB);
-		this->adresa = adresa;
-		this->nrAngajati = 0;
-		this->suprafata = suprafata;
+	Biblioteca(string numeB, int nrAngajati, int* varsteAngajati, bool openWK) : anInfiintare(1990) {
+		this->numeBiblioteca = numeB;
+		this->nrAngajati = nrAngajati;
+		this->varsteAngajati = new int[this->nrAngajati];
+		for (int i = 0; i < this->nrAngajati; i++) {
+			this->varsteAngajati[i] = varsteAngajati[i];
+		}
 		this->deschisaInWeekend = openWK;
+	}
+
+	//constr cu p
+	Biblioteca(string numeBiblioteca, const int an, int nrAngajati) :anInfiintare(an) {
+		this->numeBiblioteca = numeBiblioteca;
+		this->nrAngajati = nrAngajati;
+		this->varsteAngajati = new int[this->nrAngajati];
+		for (int i = 0; i < this->nrAngajati; i++) {
+			this->varsteAngajati[i] = rand() % 31 + 20;
+		}
+		this->deschisaInWeekend = false;
 	}
 
 	//copy constr
 	Biblioteca(const Biblioteca &b) : anInfiintare(b.anInfiintare)
 	{
-		if (b.numeBiblioteca != NULL) {
-			this->numeBiblioteca = new char[strlen(b.numeBiblioteca) + 1];
-			strcpy_s(this->numeBiblioteca, strlen(b.numeBiblioteca) + 1, b.numeBiblioteca);
+		this->numeBiblioteca = b.numeBiblioteca;
+		this->nrAngajati = b.nrAngajati;
+		if (b.varsteAngajati != nullptr) {
+			this->varsteAngajati = new int[this->nrAngajati];
+			for (int i = 0; i < this->nrAngajati; i++) {
+				this->varsteAngajati[i] = b.varsteAngajati[i];
+			}
 		}
 		else {
-			delete[]this->numeBiblioteca;
+			this->varsteAngajati = nullptr;
 		}
-		this->adresa = b.adresa;
-		this->nrAngajati = b.nrAngajati;
-		this->suprafata = b.suprafata;
 		this->deschisaInWeekend = b.deschisaInWeekend;
 	}
 
+
 	Biblioteca operator=(const Biblioteca& b) {
 		if (this != &b) {
-			if (this->numeBiblioteca != NULL) {
-				delete[]this->numeBiblioteca;
-			}
-			this->numeBiblioteca = new char[strlen(b.numeBiblioteca) + 1];
-			strcpy_s(this->numeBiblioteca, strlen(b.numeBiblioteca) + 1, b.numeBiblioteca);
-			this->adresa = b.adresa;
+			this->numeBiblioteca = b.numeBiblioteca;
 			this->nrAngajati = b.nrAngajati;
-			this->suprafata = b.suprafata;
-			this->deschisaInWeekend = b.deschisaInWeekend;	
+			delete[] this->varsteAngajati;
+			if (b.varsteAngajati != NULL) {
+				this->varsteAngajati = new int[this->nrAngajati];
+				for (int i = 0; i < this->nrAngajati; i++) {
+					this->varsteAngajati[i] = b.varsteAngajati[i];
+				}
+			}
+			else {
+				delete[]this->varsteAngajati;
+			}
+			this->deschisaInWeekend = b.deschisaInWeekend;
 		}
 		return *this;
 	}
 
 
 	friend ostream& operator<<(ostream& ost, const Biblioteca& bib) {
-		ost << "Denumire: " << bib.numeBiblioteca << endl;
 		ost << "An Infiintare: " << bib.anInfiintare << endl;
-		ost << "Adresa: " << bib.adresa << endl;
+		ost << "Denumire: " << bib.numeBiblioteca << endl;
 		ost << "Numar Angajati: " << bib.nrAngajati << endl;
-		ost << "Suprafata: " << bib.suprafata << endl;
-		ost << "Deschid in weekend: " << (bib.deschisaInWeekend ? "DA":"NU") << endl;
+		ost << "Varste: ";
+		if (bib.varsteAngajati != NULL) {
+			for (int i = 0; i < bib.nrAngajati - 1; i++) {
+				ost << bib.varsteAngajati[i] << ", ";
+			}
+			ost << bib.varsteAngajati[bib.nrAngajati - 1] << endl;
+		}
+		else {
+			ost << "N/A" << endl;
+		}
+		ost << "Deschis in weekend: " << (bib.deschisaInWeekend ? "DA" : "NU") << endl;
 		ost << "Numar Total Carti: " << nrTotalCarti << endl;
 
 		return ost;
@@ -148,10 +150,35 @@ public:
 
 	friend void afisareInfoBiblioteca(const Biblioteca& bib);
 
+	//op[]
+	int& operator[](int index) {
+		if(index >= 0 && index < nrAngajati) {
+			return this->varsteAngajati[index];
+		}
+		throw 404;
+	}
+
+	//op()
+	int operator()(int indexStart, int indexStop) {
+		int suma = 0;
+		for (int i = indexStart; i < indexStop; i++) {
+			suma += this->varsteAngajati[i];
+		}
+		return suma;
+	}
+
+	//op cast
+	Biblioteca operator-(const Biblioteca& b) {
+		Biblioteca aux = *this;
+		aux.nrAngajati -= b.nrAngajati;
+		return aux;
+	}
+
+
 	//destructor
 	~Biblioteca() {
-		if (this->numeBiblioteca != NULL) {
-			delete[]this->numeBiblioteca;
+		if (this->varsteAngajati != NULL) {
+			delete[]this->varsteAngajati;
 		}
 	}
 
@@ -325,6 +352,31 @@ public:
 		return ost;
 	}
 
+	//op++
+	Carte operator++() {
+		this->pretCarte += 10;
+		return *this;
+	}
+
+	Carte operator++(int) {
+		Carte aux = *this;
+		this->pretCarte += 10;
+		return aux;
+	}
+
+	//op==
+	bool operator==(const Carte& c) {
+		return this->pretCarte == c.pretCarte;
+	}
+
+	//op+
+	Carte operator+(const Carte& c) {
+		Carte suma;
+		suma.pretCarte = this->pretCarte + c.pretCarte;
+		return suma;
+	}
+
+
 	//destructor
 	~Carte() {
 		if (this->numeCarte != NULL) {
@@ -471,6 +523,21 @@ public:
 		return ost;
 	}
 
+	//op>
+	bool operator>(const Angajat& a) {
+		return this->salariu > a.salariu;
+	}
+
+	Angajat operator+=(int valoare) {
+		this->salariu += valoare;
+		return *this;
+	}
+
+	bool operator!() {
+		return !fullTime;
+	}
+
+
 	~Angajat() {
 		if (this->nume != NULL) {
 			delete[]this->nume;
@@ -481,6 +548,12 @@ int Angajat::nrAngajati = 1;
 
 void main() {
 	cout << "------------------BIBLIOTECA-------------------" << endl;
+
+	int* varste = new int[10];
+	for (int i = 0; i < 10; i++) {
+		varste[i] = rand() % 31 + 20;
+	}
+
 	cout << "--------Faza1---------" << endl;
 	Biblioteca b1;
 	cout << b1 << endl;
@@ -488,7 +561,7 @@ void main() {
 	Biblioteca b2("Biblioteca2", 1995, 5);
 	cout << b2 << endl;
 
-	Biblioteca b3("Biblioteca3", "Bucuresti, Sector3", 50.0F, true);
+	Biblioteca b3("Biblioteca3", 3, varste, false);
 	cout << b3 << endl;
 
 	cout << endl << "--------Faza2---------" << endl;
@@ -498,16 +571,33 @@ void main() {
 	afisareInfoBiblioteca(b2);
 
 	cout << endl << "GET & SET: ";
-	cout << endl << "Adresa lui b3: " << b3.getAdresa();
+	cout << endl << "Numarul de angajati pentru Biblioteca3: " << b3.getNrAng();
 	b4.setNumeB("Humanitas");
 	cout << endl << "Noul nume al lui b4: " << b4.getNumeB();
 
 	cout << endl << "--------Faza3---------" << endl;
-	Biblioteca b5("Biblioteca5", "Bucuresti, Sector2", 29.0F, true);
+	Biblioteca b5("Biblioteca5", 2, varste, false);
 	Biblioteca b7("Biblioteca6", 1990, 4);
 	b7 = b5;
 	cout << endl << b7;
 
+	cout << endl << "OP[] :\n";
+	try {
+		cout << b3[1] << endl;
+		b3[1] = 18;
+		cout << b3[1] << endl;
+	}
+	catch (int exceptie) {
+		cout << "\nIndex out of range!";
+	}
+	
+	cout << endl << "OP() :\n";
+	Biblioteca b8("Biblioteca8", 5, varste, true);
+	cout << "Suma: " << b8(2, 4) << endl;
+
+	cout << endl << "OP- :\n";
+	Biblioteca rezultat = b3 - b5;
+	cout << "Rezultat: " << rezultat.getNrAng();
 
 
 	cout << "\n-------------------CARTE-----------------------" << endl;
@@ -531,8 +621,33 @@ void main() {
 
 
 	cout << endl << "--------Faza3---------" << endl;
+	Carte c5(10, "Carte5", "Autor5", 46.99F, "Editura5", true, 290);
+	Carte c6("Carte6", "Autor6", 38.99F);
+	c6 = c5;
+	cout << c6 << endl;
 
+	cout << endl << "OP== :\n";
+	if (c3 == c6) {
+		cout << "Angajatii au acelasi salariu." << endl;
+	}
+	else {
+		cout << "Angajatii NU au acelasi salariu." << endl;
 
+	}
+
+	cout << endl << "OP++ :\n";
+	cout << "Pret inainte de marire: " << c5.getPretCarte();
+	c5 = c4++;
+	c5 = ++c4;
+	cout << "Pret dupa marire: " << c5.getPretCarte();
+
+	cout << endl << "OP+ :\n";
+	Carte suma = c5 + c6;
+	cout << "Pret carte5: " << c5.getPretCarte() << endl;
+	cout << "Pret carte6: " << c6.getPretCarte() << endl;
+	cout << "Suma: " << suma.getPretCarte();
+
+	
 
 	cout << "\n-------------------ANGAJATI--------------------" << endl;
 	cout << "--------Faza1---------" << endl;
@@ -557,6 +672,33 @@ void main() {
 	cout << endl << "Noul salariu al lui a2: " << a2.getSalariu();
 
 	cout << endl << "--------Faza3---------" << endl;
+	Angajat a5("Angajat5", 29, 3600);
+	Angajat a6("Angajat6", "Functia6", true);
+	a6 = a5;
+	cout << a6 << endl;
+	cout << endl << "OP> :\n";
+	if (a6 > a2) {
+		cout << "Angajatul a6 are salariul mai mare decat angajatul a2." << endl;
+	}
+	else {
+		cout << "Angajatul a6 are salariul mai mic decat angajatul a2." << endl;
+	}
+
+	cout << endl << "OP+= :\n";
+
+	cout << "Salariul lui a4 inainte de marire: " << a5.getSalariu() << endl;
+	a5 += 400;
+	cout << "Salariul lui a4 dupa marire: " << a5.getSalariu() << endl;
+
+	cout << endl << "OP! :\n";
+	Angajat a7("Angajat7", "Functie7", true);
+	cout << a7 << endl;
+	if (!a7) {
+		cout << "Angajatul7 este full time." << endl;
+	}
+	else {
+		cout << "Angajatul7 NU este full time." << endl;
+	}
 
 
 }

@@ -1,8 +1,9 @@
 ﻿  proiect.cpp
-c:\desktop2\an supl\poo - sem\proiect\apostollavinia_proiect\apostollavinia_proiect\proiect.cpp(69): warning C4042: 'nrNouCarti': has bad storage class
-c:\desktop2\an supl\poo - sem\proiect\apostollavinia_proiect\apostollavinia_proiect\proiect.cpp(240): warning C4042: 'nouTVA': has bad storage class
-c:\desktop2\an supl\poo - sem\proiect\apostollavinia_proiect\apostollavinia_proiect\proiect.cpp(335): warning C4305: 'initializing': truncation from 'double' to 'float'
-c:\desktop2\an supl\poo - sem\proiect\apostollavinia_proiect\apostollavinia_proiect\proiect.cpp(395): warning C4042: 'nrNouAng': has bad storage class
-c:\desktop2\an supl\poo - sem\proiect\apostollavinia_proiect\apostollavinia_proiect\proiect.cpp(482): warning C4326: return type of 'main' should be 'int' instead of 'void'
-c:\desktop2\an supl\poo - sem\proiect\apostollavinia_proiect\apostollavinia_proiect\proiect.cpp(378): warning C4715: 'Angajat::getFunctie': not all control paths return a value
+c:\desktop2\an supl\poo - sem\proiect\apostollavinia_proiect\apostollavinia_proiect\proiect.cpp(54): warning C4042: 'nrNouCarti': has bad storage class
+c:\desktop2\an supl\poo - sem\proiect\apostollavinia_proiect\apostollavinia_proiect\proiect.cpp(267): warning C4042: 'nouTVA': has bad storage class
+c:\desktop2\an supl\poo - sem\proiect\apostollavinia_proiect\apostollavinia_proiect\proiect.cpp(387): warning C4305: 'initializing': truncation from 'double' to 'float'
+c:\desktop2\an supl\poo - sem\proiect\apostollavinia_proiect\apostollavinia_proiect\proiect.cpp(447): warning C4042: 'nrNouAng': has bad storage class
+c:\desktop2\an supl\poo - sem\proiect\apostollavinia_proiect\apostollavinia_proiect\proiect.cpp(549): warning C4326: return type of 'main' should be 'int' instead of 'void'
+c:\desktop2\an supl\poo - sem\proiect\apostollavinia_proiect\apostollavinia_proiect\proiect.cpp(590): warning C4101: 'exceptie': unreferenced local variable
+c:\desktop2\an supl\poo - sem\proiect\apostollavinia_proiect\apostollavinia_proiect\proiect.cpp(430): warning C4715: 'Angajat::getFunctie': not all control paths return a value
   ApostolLavinia_Proiect.vcxproj -> C:\DESKTOP2\An supl\POO - SEM\Proiect\ApostolLavinia_Proiect\Debug\ApostolLavinia_Proiect.exe
