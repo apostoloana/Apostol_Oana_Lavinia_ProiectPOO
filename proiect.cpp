@@ -1,4 +1,4 @@
-#include<iostream>
+﻿#include<iostream>
 #include<cstdlib>
 #include<string>
 
@@ -95,14 +95,14 @@ public:
 	{
 		this->numeBiblioteca = b.numeBiblioteca;
 		this->nrAngajati = b.nrAngajati;
-		if (b.varsteAngajati != nullptr) {
+		if (b.varsteAngajati != NULL) {
 			this->varsteAngajati = new int[this->nrAngajati];
 			for (int i = 0; i < this->nrAngajati; i++) {
 				this->varsteAngajati[i] = b.varsteAngajati[i];
 			}
 		}
 		else {
-			this->varsteAngajati = nullptr;
+			delete[]this->varsteAngajati;
 		}
 		this->deschisaInWeekend = b.deschisaInWeekend;
 	}
@@ -146,6 +146,24 @@ public:
 		ost << "Numar Total Carti: " << nrTotalCarti << endl;
 
 		return ost;
+	}
+
+	friend istream& operator>>(istream& in, Biblioteca& bib) {
+		cout << "Nume: "; in >> bib.numeBiblioteca;
+		cout << "Nr angajati: "; in >> bib.nrAngajati;
+		
+		if (bib.varsteAngajati != NULL) {
+			delete[]bib.varsteAngajati;
+		}
+		bib.varsteAngajati = new int[bib.nrAngajati];
+		cout << "Varste: ";
+		for (int i = 0; i < bib.nrAngajati; i++) {
+			in >> bib.varsteAngajati[i];
+		}
+		cout << "Deschis in weekend(1-true, 0-false): "; in >> bib.deschisaInWeekend;
+		bib.deschisaInWeekend = (bib.deschisaInWeekend != 0);
+
+		return in;
 	}
 
 	friend void afisareInfoBiblioteca(const Biblioteca& bib);
@@ -324,13 +342,15 @@ public:
 		this->nrPagini = c.nrPagini;
 	}
 
-	Carte operator=(const Carte& c) {
+	Carte& operator=(const Carte& c) {
 		if (this != &c) {
 			if (this->numeCarte != NULL) {
+				this->numeCarte = new char[strlen(c.numeCarte) + 1];
+				strcpy_s(this->numeCarte, strlen (c.numeCarte) + 1, c.numeCarte);
+			}
+			else {
 				delete[]this->numeCarte;
 			}
-			this->numeCarte = new char[strlen(c.numeCarte) + 1];
-			strcpy_s(this->numeCarte, strlen(c.numeCarte) + 1, c.numeCarte);
 			this->numeAutor = c.numeAutor;
 			this->pretCarte = c.pretCarte;
 			this->editura = c.editura;
@@ -340,16 +360,42 @@ public:
 		return *this;
 	}
 
+
+
 	friend ostream& operator<<(ostream& ost, const Carte& c) {
 		ost << "Id Carte: " << c.idCarte << endl;
 		ost << "Nume Carte: " << c.numeCarte << endl;
 		ost << "Nume Autor: " << c.numeAutor << endl;
 		ost << "Pret Carte: " << c.pretCarte << endl;
+		ost << "Editura Carte: " << c.editura << endl;
 		ost << "Disponibilitate Carte: " << (c.disponibila ? "DA":"NU") << endl;
 		ost << "Nr Pagini: " << c.nrPagini << endl;
 		ost << "TVA: " << c.TVA << endl;
 		
 		return ost;
+	}
+
+	friend istream& operator>>(istream& in, Carte& c) {
+		char aux[20];
+		cout << endl << "Nume Carte: ";
+		in >> aux;
+		if (c.numeCarte != NULL)
+		{
+			delete[] c.numeCarte;
+		}
+		c.numeCarte = new char[strlen(aux) + 1];
+		strcpy_s(c.numeCarte, strlen(aux) + 1, aux);
+		cout << "Nume Autor: "; in >> c.numeAutor;
+		cout << "Pret Carte: "; in >> c.pretCarte;
+		cout << "Editura Carte: "; in >> c.editura;
+		cout << "Disponibilitate Carte(1 pentru true, 0 pentru false) : "; in >> c.disponibila;
+		c.disponibila = (c.disponibila != 0);
+		cout << "Nr pagini: "; 
+		in >> c.nrPagini;
+		in.ignore();
+
+		return in;
+
 	}
 
 	//op++
@@ -386,6 +432,141 @@ public:
 };
 float Carte::TVA = 0.19;
 
+class Sectiune {
+private:
+	string numeSectiune;
+	int nrCarti;
+	Carte* cartiSectiune;
+	int capacitateMax;
+public:
+	//constr 
+	Sectiune() {
+		this->numeSectiune = "Sci-Fi";
+		this->nrCarti = 3;
+		this->cartiSectiune = nullptr;
+		this->capacitateMax = 10;
+	}
+
+	//get si set
+	string getNumeSectiune() {
+		return this->numeSectiune;
+	}
+
+	void setNumeSectiune(string numeSNou) {
+		if (numeSectiune.length() > 2) {
+			this->numeSectiune = numeSNou;
+		}
+	}
+
+	int getNrCarti() {
+		return nrCarti;
+	}
+
+	void setNrCarti(int nrNouCarti) {
+		this->nrCarti = nrNouCarti;
+	}
+
+	Carte* getCartiSectiune() {
+		return cartiSectiune;
+	}
+
+	int getCapMax() {
+		return this->capacitateMax;
+	}
+
+	void setCapMax(int capMaxNoua) {
+		this->capacitateMax = capMaxNoua;
+	}
+
+	//constr 
+	Sectiune(string nume, int nrCarti, Carte* cartiS, int capMax) : numeSectiune(nume), nrCarti(nrCarti), capacitateMax(capMax) {
+		cartiSectiune = new Carte[nrCarti];
+		for (int i = 0; i < nrCarti; i++) {
+			cartiSectiune[i] = cartiS[i];
+		}
+	}
+
+	//copy constr
+	Sectiune(const Sectiune& s) {
+		this->numeSectiune = s.numeSectiune;
+		this->nrCarti = s.nrCarti;
+		if (s.cartiSectiune != NULL) {
+			this->cartiSectiune = new Carte[s.nrCarti];
+			for (int i = 0; i < s.nrCarti; i++) {
+				cartiSectiune[i] = s.cartiSectiune[i];
+			}
+		}
+		else {
+			delete[]this->cartiSectiune;
+		}
+
+		this->capacitateMax = s.capacitateMax;
+	}
+
+	//op=
+	Sectiune& operator=(const Sectiune& s) {
+		if (this != &s) {
+			this->numeSectiune = s.numeSectiune;
+			this->nrCarti = s.nrCarti;
+			if (s.cartiSectiune != NULL) {
+				this->cartiSectiune = new Carte[s.nrCarti];
+				for (int i = 0; i < s.nrCarti; i++) {
+					cartiSectiune[i] = s.cartiSectiune[i];
+				}
+			}
+			else {
+				delete[]this->cartiSectiune;
+			}
+
+			this->capacitateMax = s.capacitateMax;
+		}
+
+		return *this;
+	}
+
+
+	friend ostream& operator<<(ostream& ost, const Sectiune& s) {
+		ost << "Nume sectiune: " << s.numeSectiune << endl;
+		ost << "Numar carti: " << s.nrCarti << endl;
+		ost << "Carti: " << endl;
+		for (int i = 0; i < s.nrCarti; i++) {
+			ost << s.cartiSectiune[i] << endl;
+		}
+		//ost << "Capacitate Max: " << s.capacitateMax << endl;
+
+		return ost;
+	}
+
+	Carte& operator[](int index) {
+		if (index >= 0 && index < this->nrCarti) {
+			return this->cartiSectiune[index];
+		}
+		throw 404;
+	}
+
+
+	Sectiune& operator+=(const Carte& carteNoua) {
+		if (nrCarti < capacitateMax) {
+			if (cartiSectiune == NULL) {
+				cartiSectiune = new Carte[capacitateMax];
+			}
+			cartiSectiune[nrCarti++] = carteNoua;
+		}
+		else {
+			throw overflow_error("Sectiune plina");
+		}
+
+		return *this;
+	}
+
+
+
+	~Sectiune() {
+		if (cartiSectiune != NULL) {
+			delete[]cartiSectiune;
+		}	
+	}
+};
 
 class Angajat {
 private:
@@ -523,6 +704,25 @@ public:
 		return ost;
 	}
 
+	friend istream& operator>>(istream& in, Angajat& a) {
+		char aux[20];
+		cout << endl << "Nume: ";
+		in >> aux;
+		if (a.nume != NULL)
+		{
+			delete[] a.nume;
+		}
+		a.nume = new char[strlen(aux) + 1];
+		strcpy_s(a.nume, strlen(aux) + 1, aux);
+		cout << "Varsta: "; in >> a.varsta;
+		cout << "Salariu: "; in >> a.salariu;
+		cout << "Functie: "; in >> a.functie;
+		cout << "Full Time(1-true : 0-false): "; in >> a.fullTime;
+		a.fullTime = (a.fullTime != 0);
+
+		return in;
+	}
+
 	//op>
 	bool operator>(const Angajat& a) {
 		return this->salariu > a.salariu;
@@ -599,6 +799,10 @@ void main() {
 	Biblioteca rezultat = b3 - b5;
 	cout << "Rezultat: " << rezultat.getNrAng();
 
+	//cout << endl << "--------Faza4---------" << endl;
+	//Biblioteca b9;
+	//cin >> b9;
+
 
 	cout << "\n-------------------CARTE-----------------------" << endl;
 	cout << "--------Faza1---------" << endl;
@@ -647,7 +851,17 @@ void main() {
 	cout << "Pret carte6: " << c6.getPretCarte() << endl;
 	cout << "Suma: " << suma.getPretCarte();
 
-	
+	cout << endl << "--------Faza4---------" << endl;
+
+	Carte c7(10, "Carte7", "Autor7", 65.99F, "Editura7", true, 550);
+	//cin >> c7;
+	//*const int nrCarti = 3;
+	//int* vecCarte = new int[4];
+	//for (int i = 0; i < nrCarti; i++) {
+	//	Carte carte;
+	//	cin >> carte;
+
+	//}*/
 
 	cout << "\n-------------------ANGAJATI--------------------" << endl;
 	cout << "--------Faza1---------" << endl;
@@ -694,11 +908,41 @@ void main() {
 	Angajat a7("Angajat7", "Functie7", true);
 	cout << a7 << endl;
 	if (!a7) {
-		cout << "Angajatul7 este full time." << endl;
+		cout << "Angajatul7 are program full time." << endl;
 	}
 	else {
-		cout << "Angajatul7 NU este full time." << endl;
+		cout << "Angajatul7 NU are program full time." << endl;
 	}
+
+	//cout << endl << "--------Faza4---------" << endl;
+	//Angajat a8;
+	//cin >> a8;
+
+	cout << endl << "---------------------------FAZA 5 ------------------------------" << endl;
+
+	Sectiune sectiune;
+	Carte c9(90, "Carte9", "Autor9", 60.99F, "Editura9", true, 300);
+	Carte c10(100, "Carte10", "Autor10", 139.99F, "Editura10", true, 370);
+
+
+	cout << "\n---------------OP+=  &  OP<<----------------" << endl;
+
+	sectiune += c9;
+	sectiune += c10;
+
+	cout << sectiune << endl;
+
+
+	cout << "\n---------------OP[]----------------" << endl;
+	
+	try {
+		Carte& carteAccesata = sectiune[4];
+		cout << "Carte accesata: " << carteAccesata << endl;
+	}
+	catch(int exceptie){
+		cout << "Index out of range!";
+	}
+
 
 
 }
