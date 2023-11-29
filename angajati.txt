@@ -1,0 +1,28 @@
+Id Angajat: 11
+Nume: Andrei M.
+Varsta: 33
+Salariu: 3300
+Functie: Bibliotecar1
+Full Time: DA
+Nr. Total Angajati: 15
+Id Angajat: 12
+Nume: Alina R.
+Varsta: 30
+Salariu: 1800
+Functie: Bibliotecar2
+Full Time: NU
+Nr. Total Angajati: 15
+Id Angajat: 13
+Nume: Horia C.
+Varsta: 22
+Salariu: 2900
+Functie: Bibliotecar3
+Full Time: DA
+Nr. Total Angajati: 15
+Id Angajat: 14
+Nume: Iolanda D.
+Varsta: 23
+Salariu: 2000
+Functie: Bibliotecar4
+Full Time: NU
+Nr. Total Angajati: 15

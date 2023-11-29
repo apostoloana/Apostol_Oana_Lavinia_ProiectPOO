@@ -1,4 +1,5 @@
 ﻿#include<iostream>
+#include<fstream>
 #include<cstdlib>
 #include<string>
 
@@ -148,6 +149,26 @@ public:
 		return ost;
 	}
 
+	friend ofstream& operator<<(ofstream& ost, const Biblioteca& bib) {
+		ost << "An Infiintare: " << bib.anInfiintare << endl;
+		ost << "Denumire: " << bib.numeBiblioteca << endl;
+		ost << "Numar Angajati: " << bib.nrAngajati << endl;
+		ost << "Varste: ";
+		if (bib.varsteAngajati != NULL) {
+			for (int i = 0; i < bib.nrAngajati - 1; i++) {
+				ost << bib.varsteAngajati[i] << ", ";
+			}
+			ost << bib.varsteAngajati[bib.nrAngajati - 1] << endl;
+		}
+		else {
+			ost << "N/A" << endl;
+		}
+		ost << "Deschis in weekend: " << (bib.deschisaInWeekend ? "DA" : "NU") << endl;
+		ost << "Numar Total Carti: " << nrTotalCarti << endl;
+
+		return ost;
+	}
+
 	friend istream& operator>>(istream& in, Biblioteca& bib) {
 		cout << "Nume: "; in >> bib.numeBiblioteca;
 		cout << "Nr angajati: "; in >> bib.nrAngajati;
@@ -207,6 +228,10 @@ void afisareInfoBiblioteca(const Biblioteca& bib) {
 	cout << "Functie globala: " << endl;
 	cout << "Informatii biblioteca: " << bib.numeBiblioteca << " - Nr Angajati: " << bib.nrAngajati;
 }
+
+class Institutie : public Biblioteca {
+
+};
 
 
 class Carte {
@@ -375,6 +400,30 @@ public:
 		return ost;
 	}
 
+	void scrieInFisierCarte() {
+		ofstream f("carte.bin", ios::binary | ios::app);
+		if (!f.is_open()) {
+			cerr << "Eroare la deschiderea fisierului." << endl;
+			return;
+		}
+		if (this->numeCarte != nullptr) {
+			int lungimeNumeCarte = strlen(this->numeCarte);
+			f.write((char*)&lungimeNumeCarte, sizeof(int));
+			for (int i = 0; i < lungimeNumeCarte; i++) {
+				f.write((char*)&this->numeCarte[i], sizeof(char));
+			}
+		}
+		int lungimeNumeAutor = numeAutor.length();
+		f.write((char*)&lungimeNumeAutor, sizeof(int));
+		f.write(numeAutor.c_str(), lungimeNumeAutor);
+		f.write((char*)&this->pretCarte, sizeof(float));
+		int lungimeEditura = editura.length();
+		f.write((char*)&lungimeEditura, sizeof(int));
+		f.write(editura.c_str(), lungimeEditura);
+		f.write((char*)&this->disponibila, sizeof(bool));
+		f.close();
+	}
+
 	friend istream& operator>>(istream& in, Carte& c) {
 		char aux[20];
 		cout << endl << "Nume Carte: ";
@@ -537,6 +586,23 @@ public:
 		return ost;
 	}
 
+	void scrieInFisierSectiune() {
+		ofstream f("sectiune.bin", ios::binary | ios::app);
+		if (!f.is_open()) {
+			cerr << endl << "Eroare la deschiderea fisierului";
+			return;
+		}
+		int lungimeNumeS = numeSectiune.length();
+		f.write((char*)&lungimeNumeS, sizeof(int));
+		f.write(numeSectiune.c_str(), lungimeNumeS);
+		f.write((char*)&this->nrCarti, sizeof(int));
+		//vectorul
+		for (int i = 0; i < nrCarti; i++) {
+			cartiSectiune[i].scrieInFisierCarte();
+		}
+		f.close();
+	}
+
 	Carte& operator[](int index) {
 		if (index >= 0 && index < this->nrCarti) {
 			return this->cartiSectiune[index];
@@ -592,7 +658,7 @@ public:
 		}
 	}
 
-	int getVarsta(){
+	int getVarsta() {
 		return this->varsta;
 	}
 	void setVarsta(int varstaNoua) {
@@ -609,7 +675,7 @@ public:
 			return this->functie;
 		}
 	}
-	void setFunctie(string functieNoua){
+	void setFunctie(string functieNoua) {
 		if (functie.length() > 2) {
 			this->functie = functieNoua;
 		}
@@ -630,7 +696,7 @@ public:
 	}
 
 	//constr f param
-	Angajat():idAngajat(nrAngajati++){
+	Angajat() :idAngajat(nrAngajati++) {
 		nume = new char[strlen("Anonim") + 1];
 		strcpy_s(nume, strlen("Anonim") + 1, "Anonim");
 		varsta = 0;
@@ -639,15 +705,15 @@ public:
 		fullTime = false;
 	}
 
-	//constr cu param
-	Angajat(const char *nume, int varsta, int salariu) : idAngajat(nrAngajati++)
+	//constr cu toti param
+	Angajat(const char *nume, int varsta, int salariu, string functie, bool fullTime) : idAngajat(nrAngajati++)
 	{
 		this->nume = new char[strlen(nume) + 1];
 		strcpy_s(this->nume, strlen(nume) + 1, nume);
 		this->varsta = varsta;
 		this->salariu = salariu;
-		this->functie = "Functie0";
-		this->fullTime = false;
+		this->functie = functie;
+		this->fullTime = fullTime;
 	}
 
 	Angajat(const char *nume, string functie, bool fullTime) : idAngajat(nrAngajati++)
@@ -680,7 +746,7 @@ public:
 		if (this != &a) {
 			if (this->nume != NULL) {
 				delete[]this->nume;
-				
+
 			}
 			this->nume = new char[strlen(a.nume) + 1];
 			strcpy_s(this->nume, strlen(a.nume) + 1, a.nume);
@@ -702,6 +768,39 @@ public:
 		ost << "Nr. Total Angajati: " << a.nrAngajati << endl;
 
 		return ost;
+	}
+
+	friend ofstream& operator<<(ofstream& ost, const Angajat& a) {
+		ost << "Id Angajat: " << a.idAngajat << endl;
+		ost << "Nume: " << a.nume << endl;
+		ost << "Varsta: " << a.varsta << endl;
+		ost << "Salariu: " << a.salariu << endl;
+		ost << "Functie: " << a.functie << endl;
+		ost << "Full Time: " << (a.fullTime ? "DA" : "NU") << endl;
+		ost << "Nr. Total Angajati: " << a.nrAngajati << endl;
+
+		return ost;
+	}
+
+	void scrieInFisier() {
+		ofstream f("angajati.bin", ios::binary | ios::app);
+		if (!f.is_open()) {
+			cerr << "Eroare la deschiderea fisierului." << endl;
+			return;
+		}
+		int lungime = strlen(this->nume);
+		f.write((char*)&lungime, sizeof(int));
+		for (int i = 0; i < lungime; i++) {
+			f.write((char*)&this->nume[i], sizeof(char));
+		}
+		f.write((char*)&this->varsta, sizeof(int));
+		f.write((char*)&this->salariu, sizeof(float));
+		//f.write((char*)&this->functie, sizeof(string));
+		int lungimeFunctie = functie.length();
+		f.write((char*)&lungimeFunctie, sizeof(int));
+		f.write(functie.c_str(), lungimeFunctie);
+		f.write((char*)&this->fullTime, sizeof(bool));
+		f.close();
 	}
 
 	friend istream& operator>>(istream& in, Angajat& a) {
@@ -745,6 +844,14 @@ public:
 	}
 };
 int Angajat::nrAngajati = 1;
+
+class AngajatulLunii : public Angajat{
+private:
+	int prima;
+	bool promovat;
+	char* nume;
+
+};
 
 void main() {
 	cout << "------------------BIBLIOTECA-------------------" << endl;
@@ -868,7 +975,7 @@ void main() {
 	Angajat a1;
 	cout << a1 << endl;
 
-	Angajat a2("Angajat1", 20, 3000);
+	Angajat a2("Angajat1", 20, 3000, "Functie1", true);
 	cout << a2 << endl;
 
 	Angajat a3("Angajat2", "Functie1", false);
@@ -880,13 +987,13 @@ void main() {
 	cout << a4;
 
 	cout << endl << "GET & SET: ";
-	
+
 	cout << endl << "Functia angajatului a4 - " << a4.getFunctie();
 	a2.setSalariu(4500);
 	cout << endl << "Noul salariu al lui a2: " << a2.getSalariu();
 
 	cout << endl << "--------Faza3---------" << endl;
-	Angajat a5("Angajat5", 29, 3600);
+	Angajat a5("Angajat5", 29, 3600, "Functie5", true);
 	Angajat a6("Angajat6", "Functia6", true);
 	a6 = a5;
 	cout << a6 << endl;
@@ -905,7 +1012,7 @@ void main() {
 	cout << "Salariul lui a4 dupa marire: " << a5.getSalariu() << endl;
 
 	cout << endl << "OP! :\n";
-	Angajat a7("Angajat7", "Functie7", true);
+	Angajat a7("Angajat7", 22, 2800, "Functie7", true);
 	cout << a7 << endl;
 	if (!a7) {
 		cout << "Angajatul7 are program full time." << endl;
@@ -914,9 +1021,10 @@ void main() {
 		cout << "Angajatul7 NU are program full time." << endl;
 	}
 
-	//cout << endl << "--------Faza4---------" << endl;
-	//Angajat a8;
+	cout << endl << "--------Faza4---------" << endl;
+	Angajat a8;
 	//cin >> a8;
+
 
 	cout << endl << "---------------------------FAZA 5 ------------------------------" << endl;
 
@@ -943,6 +1051,38 @@ void main() {
 		cout << "Index out of range!";
 	}
 
+	cout << endl << "---------------------------FAZA 6 ------------------------------" << endl;
+	cout << "--------------BIBLIOTECA-ofstream---------------" << endl;
+	Biblioteca b15("Biblioteca15", 3, varste, true);
+	ofstream file("biblioteca.txt", ios::out);
+	file << b15;
 
+	
+	cout << "\n--------------ANGAJATI-ofstream---------------" << endl;
+	Angajat a9("Andrei M.", 33, 3300, "Bibliotecar1", true);
+	Angajat a10("Alina R.", 30, 1800, "Bibliotecar2", false);
+	Angajat a11("Horia C.", 22, 2900, "Bibliotecar3", true);
+	Angajat a12("Iolanda D.", 23, 2000, "Bibliotecar4", false);
+	//a9.scrieInFisier();
+	//a10.scrieInFisier();
+	//a11.scrieInFisier();
+	//a12.scrieInFisier();
+
+	ofstream fisierAngajati("angajati.txt", ios::out);
+	fisierAngajati << a9;
+	fisierAngajati << a10;
+	fisierAngajati << a11;
+	fisierAngajati << a12;
+
+	cout << "\n--------------CARTE-ofstream---------------" << endl;
+	Carte c20(20, "Carte20", "Autor20", 39.99F, "Editura20", true, 400);
+	Carte c21(21, "Carte21", "Autor21", 59.99F, "Editura21", true, 300);
+	c20.scrieInFisierCarte();
+	c21.scrieInFisierCarte();
+
+	cout << "\n--------------SECTIUNE-ofstream---------------" << endl;
+	Carte cartiSectiune[] = { c20, c21 };
+	Sectiune s2("Drama", 2, cartiSectiune, 5);
+	s2.scrieInFisierSectiune();
 
 }

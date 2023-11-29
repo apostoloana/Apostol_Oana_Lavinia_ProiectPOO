@@ -1,0 +1,6 @@
+An Infiintare: 1990
+Denumire: Biblioteca15
+Numar Angajati: 3
+Varste: 30, 42, 30
+Deschis in weekend: DA
+Numar Total Carti: 400
