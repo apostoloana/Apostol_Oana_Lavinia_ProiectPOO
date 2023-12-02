@@ -70,7 +70,7 @@ public:
 	}
 
 	//constr
-	Biblioteca(string numeB, int nrAngajati, int* varsteAngajati, bool openWK) : anInfiintare(1990) {
+	Biblioteca(const int an, string numeB, int nrAngajati, int* varsteAngajati, bool openWK) : anInfiintare(an) {
 		this->numeBiblioteca = numeB;
 		this->nrAngajati = nrAngajati;
 		this->varsteAngajati = new int[this->nrAngajati];
@@ -81,14 +81,14 @@ public:
 	}
 
 	//constr cu p
-	Biblioteca(string numeBiblioteca, const int an, int nrAngajati) :anInfiintare(an) {
+	Biblioteca(string numeBiblioteca, int nrAngajati, bool openWK) :anInfiintare(2023) {
 		this->numeBiblioteca = numeBiblioteca;
 		this->nrAngajati = nrAngajati;
 		this->varsteAngajati = new int[this->nrAngajati];
 		for (int i = 0; i < this->nrAngajati; i++) {
 			this->varsteAngajati[i] = rand() % 31 + 20;
 		}
-		this->deschisaInWeekend = false;
+		this->deschisaInWeekend = openWK;
 	}
 
 	//copy constr
@@ -172,7 +172,7 @@ public:
 	friend istream& operator>>(istream& in, Biblioteca& bib) {
 		cout << "Nume: "; in >> bib.numeBiblioteca;
 		cout << "Nr angajati: "; in >> bib.nrAngajati;
-		
+
 		if (bib.varsteAngajati != NULL) {
 			delete[]bib.varsteAngajati;
 		}
@@ -191,7 +191,7 @@ public:
 
 	//op[]
 	int& operator[](int index) {
-		if(index >= 0 && index < nrAngajati) {
+		if (index >= 0 && index < nrAngajati) {
 			return this->varsteAngajati[index];
 		}
 		throw 404;
@@ -230,7 +230,103 @@ void afisareInfoBiblioteca(const Biblioteca& bib) {
 }
 
 class Institutie : public Biblioteca {
+private:
+	int nrSaliLectura;
+	bool areAbonament;
+	int* nrStudentiInSala;
+public:
+	//get si set
+	int getNrSaliLectura() {
+		return this->nrSaliLectura;
+	}
 
+	void setNrSaliLectura(int nrNouSaliL) {
+		this->nrSaliLectura = nrNouSaliL;
+	}
+
+	bool getAbonament() {
+		return this->areAbonament;
+	}
+
+	void setAbonament(bool areAbNou) {
+		this->areAbonament = areAbNou;
+	}
+
+	//constr fara param
+	Institutie() : Biblioteca() {
+		this->nrSaliLectura = 0;
+		this->areAbonament = false;
+		this->nrStudentiInSala = NULL;
+	}
+
+	//constr cu param
+	Institutie(int nrSaliL, bool areAb, int* nrStudInSala) : Biblioteca() {
+		this->nrSaliLectura = nrSaliL;
+		this->areAbonament = areAb;
+		this->nrStudentiInSala = new int[nrSaliLectura];
+		for (int i = 0; i < nrSaliLectura; i++) {
+			this->nrStudentiInSala[i] = nrStudentiInSala[i];
+		}
+	}
+
+	Institutie(const int an, string numeB, int nrAngajati, int* varsteAngajati, bool openWK, int nrSaliL, bool areAb, int* nrStudentiInSala) : Biblioteca(an, numeB, nrAngajati, varsteAngajati, openWK) {
+		this->nrSaliLectura = nrSaliL;
+		this->areAbonament = areAb;
+		this->nrStudentiInSala = new int[nrSaliLectura];
+		for (int i = 0; i < nrSaliLectura; i++) {
+			this->nrStudentiInSala[i] = nrStudentiInSala[i];
+		}
+	}
+
+	//copy constr
+	Institutie(const Institutie& ins) : Biblioteca(ins) {
+		this->nrSaliLectura = ins.nrSaliLectura;
+		this->areAbonament = ins.areAbonament;
+		this->nrStudentiInSala = new int[ins.nrSaliLectura];
+		for (int i = 0; i < ins.nrSaliLectura; i++) {
+			this->nrStudentiInSala[i] = ins.nrStudentiInSala[i];
+		}
+	}
+
+	//op=
+	Institutie& operator=(const Institutie& ins) {
+		if (this != &ins) {
+			Biblioteca::operator=(ins);
+			this->nrSaliLectura = ins.nrSaliLectura;
+			this->areAbonament = ins.areAbonament;
+			if (this->nrStudentiInSala != NULL) {
+				delete[]this->nrStudentiInSala;
+			}
+			this->nrStudentiInSala = new int[ins.nrSaliLectura];
+			for (int i = 0; i < ins.nrSaliLectura; i++) {
+				this->nrStudentiInSala[i] = ins.nrStudentiInSala[i];
+			}
+		}
+		return *this;
+	}
+
+	friend ostream& operator<<(ostream& ost, const Institutie& ins) {
+		ost << (Biblioteca)ins;
+		ost << "Nr sali lectura: " << ins.nrSaliLectura << endl;
+		ost << "Are abonament: " << (ins.areAbonament ? "DA" : "NU") << endl;
+		if (ins.nrStudentiInSala != NULL) {
+			for (int i = 0; i < ins.nrSaliLectura; i++) {
+				ost << "Nr studenti din sala: " << i + 1 << " : " << ins.nrStudentiInSala[i] << endl;
+			}
+			//ost << ins.nrStudentiInSala[ins.nrSaliLectura] << endl;
+		}
+		else {
+			ost << "Nu sunt studenti in sali!" << endl;
+		}
+
+		return ost;
+	}
+
+	~Institutie() {
+		if (this->nrStudentiInSala != NULL) {
+			delete[]this->nrStudentiInSala;
+		}
+	}
 };
 
 
@@ -849,7 +945,69 @@ class AngajatulLunii : public Angajat{
 private:
 	int prima;
 	bool promovat;
-	char* nume;
+
+public:
+	//get si set
+	int getPrima() {
+		return this->prima;
+	}
+
+	void setPrima(int primaNoua) {
+		this->prima = primaNoua;
+	}
+
+	bool getPromovat() {
+		return this->promovat;
+	}
+
+	void setPromovat(bool promovareNoua) {
+		this->promovat = promovareNoua;
+	}
+
+	//constr f param
+	AngajatulLunii() : Angajat("Lavinia A.", 33, 3000, "Manager", true) {
+		this->prima = 500;
+		this->promovat = false;
+	}
+
+	//constr cu param
+	AngajatulLunii(const char *nume, int varsta, int salariu, string functie, bool fullTime, int prima, bool promovat) : Angajat(nume, varsta, salariu, functie, fullTime) {
+		this->prima = prima;
+		this->promovat = promovat;
+	}
+
+	AngajatulLunii(int prima, bool promovat) : Angajat() {
+		this->prima = prima;
+		this->promovat = promovat;
+	}
+
+	//copy constr
+	AngajatulLunii(const AngajatulLunii& al) : Angajat(al) {
+		this->prima = al.prima;
+		this->prima = al.promovat;
+	}
+
+	//op=
+	AngajatulLunii operator=(const AngajatulLunii& al) {
+		if (this != &al) {
+			Angajat::operator=(al);
+			this->prima = al.prima;
+			this->prima = al.promovat;
+		}
+
+		return *this;
+	}
+
+	//op<<
+	friend ostream& operator<<(ostream& ost, const AngajatulLunii& al) {
+		ost << (Angajat)al;
+		ost << "Prima: " << al.prima << endl;
+		ost << "Promovat: " << (al.prima ? "DA" : "NU") << endl;
+
+		return ost;
+	}
+
+
 
 };
 
@@ -865,10 +1023,10 @@ void main() {
 	Biblioteca b1;
 	cout << b1 << endl;
 
-	Biblioteca b2("Biblioteca2", 1995, 5);
+	Biblioteca b2("Biblioteca2", 2, 5);
 	cout << b2 << endl;
 
-	Biblioteca b3("Biblioteca3", 3, varste, false);
+	Biblioteca b3(2023, "Biblioteca3", 3, varste, false);
 	cout << b3 << endl;
 
 	cout << endl << "--------Faza2---------" << endl;
@@ -883,8 +1041,8 @@ void main() {
 	cout << endl << "Noul nume al lui b4: " << b4.getNumeB();
 
 	cout << endl << "--------Faza3---------" << endl;
-	Biblioteca b5("Biblioteca5", 2, varste, false);
-	Biblioteca b7("Biblioteca6", 1990, 4);
+	Biblioteca b5(1980, "Biblioteca5", 2, varste, false);
+	Biblioteca b7("Biblioteca6", 4, 4);
 	b7 = b5;
 	cout << endl << b7;
 
@@ -897,16 +1055,16 @@ void main() {
 	catch (int exceptie) {
 		cout << "\nIndex out of range!";
 	}
-	
+
 	cout << endl << "OP() :\n";
-	Biblioteca b8("Biblioteca8", 5, varste, true);
+	Biblioteca b8(1994, "Biblioteca8", 5, varste, true);
 	cout << "Suma: " << b8(2, 4) << endl;
 
 	cout << endl << "OP- :\n";
 	Biblioteca rezultat = b3 - b5;
 	cout << "Rezultat: " << rezultat.getNrAng();
 
-	//cout << endl << "--------Faza4---------" << endl;
+	cout << endl << "--------Faza4---------" << endl;
 	//Biblioteca b9;
 	//cin >> b9;
 
@@ -1053,7 +1211,7 @@ void main() {
 
 	cout << endl << "---------------------------FAZA 6 ------------------------------" << endl;
 	cout << "--------------BIBLIOTECA-ofstream---------------" << endl;
-	Biblioteca b15("Biblioteca15", 3, varste, true);
+	Biblioteca b15(1990, "Biblioteca15", 3, varste, true);
 	ofstream file("biblioteca.txt", ios::out);
 	file << b15;
 
@@ -1084,5 +1242,39 @@ void main() {
 	Carte cartiSectiune[] = { c20, c21 };
 	Sectiune s2("Drama", 2, cartiSectiune, 5);
 	s2.scrieInFisierSectiune();
+
+	cout << endl << "---------------------------FAZA 7 ------------------------------" << endl;
+	cout << "\n--------------ANGAJATUL LUNII---------------" << endl;
+	AngajatulLunii al1;
+	cout << "Functia angajatului lunii:" << al1.getFunctie() << endl;
+	cout << "Prima angajatului lunii inainte de marire: " << al1.getPrima() << endl;
+	al1.setPrima(1000);
+	cout << "Prima angajatului lunii dupa marire: " << al1.getPrima() << endl;
+	AngajatulLunii al2("Oana A.", 20, 2000, "Asistent", false, 100, false);
+	cout << endl << al2 << endl;
+	AngajatulLunii al3;
+	al3 = al2;
+	cout << al3;
+
+	cout << "\n--------------INSTITUTIE---------------" << endl;
+	int* stud = new int[10];
+	for (int i = 0; i < 10; i++) {
+		stud[i] = rand() % 11 + 10;
+	}
+	Institutie ins1(1990, "Biblioteca ASE", 3, varste, false, 2, true, stud);
+	cout << endl << ins1 << endl;
+
+	cout << "Numar sali lectura: " << ins1.getNrSaliLectura() << endl;
+	ins1.setNumeB("ASE Bucuresti");
+	cout << "Noul nume al institutiei ins1: " << ins1.getNumeB() << endl;
+
+
+	Institutie ins2;
+	cout << endl << ins2 << endl;
+
+	Institutie ins3;
+	ins3 = ins1;
+	cout << endl << ins3;
+
 
 }
