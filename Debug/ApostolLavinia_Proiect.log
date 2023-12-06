@@ -1,12 +1,13 @@
 ﻿  proiect.cpp
-c:\desktop2\an supl\poo - sem\proiect\apostollavinia_proiect\apostollavinia_proiect\proiect.cpp(55): warning C4042: 'nrNouCarti': has bad storage class
-c:\desktop2\an supl\poo - sem\proiect\apostollavinia_proiect\apostollavinia_proiect\proiect.cpp(406): warning C4042: 'nouTVA': has bad storage class
-c:\desktop2\an supl\poo - sem\proiect\apostollavinia_proiect\apostollavinia_proiect\proiect.cpp(578): warning C4305: 'initializing': truncation from 'double' to 'float'
-c:\desktop2\an supl\poo - sem\proiect\apostollavinia_proiect\apostollavinia_proiect\proiect.cpp(790): warning C4042: 'nrNouAng': has bad storage class
-c:\desktop2\an supl\poo - sem\proiect\apostollavinia_proiect\apostollavinia_proiect\proiect.cpp(1014): warning C4326: return type of 'main' should be 'int' instead of 'void'
-c:\desktop2\an supl\poo - sem\proiect\apostollavinia_proiect\apostollavinia_proiect\proiect.cpp(1026): warning C4305: 'argument': truncation from 'int' to 'bool'
-c:\desktop2\an supl\poo - sem\proiect\apostollavinia_proiect\apostollavinia_proiect\proiect.cpp(1045): warning C4305: 'argument': truncation from 'int' to 'bool'
-c:\desktop2\an supl\poo - sem\proiect\apostollavinia_proiect\apostollavinia_proiect\proiect.cpp(1055): warning C4101: 'exceptie': unreferenced local variable
-c:\desktop2\an supl\poo - sem\proiect\apostollavinia_proiect\apostollavinia_proiect\proiect.cpp(1208): warning C4101: 'exceptie': unreferenced local variable
-c:\desktop2\an supl\poo - sem\proiect\apostollavinia_proiect\apostollavinia_proiect\proiect.cpp(773): warning C4715: 'Angajat::getFunctie': not all control paths return a value
+c:\desktop2\an supl\poo - sem\proiect\apostollavinia_proiect\apostollavinia_proiect\proiect.cpp(84): warning C4042: 'nrNouCarti': has bad storage class
+c:\desktop2\an supl\poo - sem\proiect\apostollavinia_proiect\apostollavinia_proiect\proiect.cpp(450): warning C4042: 'nouTVA': has bad storage class
+c:\desktop2\an supl\poo - sem\proiect\apostollavinia_proiect\apostollavinia_proiect\proiect.cpp(622): warning C4305: 'initializing': truncation from 'double' to 'float'
+c:\desktop2\an supl\poo - sem\proiect\apostollavinia_proiect\apostollavinia_proiect\proiect.cpp(632): warning C4244: 'return': conversion from 'int' to 'float', possible loss of data
+c:\desktop2\an supl\poo - sem\proiect\apostollavinia_proiect\apostollavinia_proiect\proiect.cpp(846): warning C4042: 'nrNouAng': has bad storage class
+c:\desktop2\an supl\poo - sem\proiect\apostollavinia_proiect\apostollavinia_proiect\proiect.cpp(1071): warning C4326: return type of 'main' should be 'int' instead of 'void'
+c:\desktop2\an supl\poo - sem\proiect\apostollavinia_proiect\apostollavinia_proiect\proiect.cpp(1083): warning C4305: 'argument': truncation from 'int' to 'bool'
+c:\desktop2\an supl\poo - sem\proiect\apostollavinia_proiect\apostollavinia_proiect\proiect.cpp(1102): warning C4305: 'argument': truncation from 'int' to 'bool'
+c:\desktop2\an supl\poo - sem\proiect\apostollavinia_proiect\apostollavinia_proiect\proiect.cpp(1112): warning C4101: 'exceptie': unreferenced local variable
+c:\desktop2\an supl\poo - sem\proiect\apostollavinia_proiect\apostollavinia_proiect\proiect.cpp(1294): warning C4101: 'exceptie': unreferenced local variable
+c:\desktop2\an supl\poo - sem\proiect\apostollavinia_proiect\apostollavinia_proiect\proiect.cpp(829): warning C4715: 'Angajat::getFunctie': not all control paths return a value
   ApostolLavinia_Proiect.vcxproj -> C:\DESKTOP2\An supl\POO - SEM\Proiect\ApostolLavinia_Proiect\Debug\ApostolLavinia_Proiect.exe

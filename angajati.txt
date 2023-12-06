@@ -1,28 +1,28 @@
-Id Angajat: 11
+Id Angajat: 13
 Nume: Andrei M.
 Varsta: 33
 Salariu: 3300
 Functie: Bibliotecar1
 Full Time: DA
-Nr. Total Angajati: 15
-Id Angajat: 12
+Nr. Total Angajati: 17
+Id Angajat: 14
 Nume: Alina R.
 Varsta: 30
 Salariu: 1800
 Functie: Bibliotecar2
 Full Time: NU
-Nr. Total Angajati: 15
-Id Angajat: 13
+Nr. Total Angajati: 17
+Id Angajat: 15
 Nume: Horia C.
 Varsta: 22
 Salariu: 2900
 Functie: Bibliotecar3
 Full Time: DA
-Nr. Total Angajati: 15
-Id Angajat: 14
+Nr. Total Angajati: 17
+Id Angajat: 16
 Nume: Iolanda D.
 Varsta: 23
 Salariu: 2000
 Functie: Bibliotecar4
 Full Time: NU
-Nr. Total Angajati: 15
+Nr. Total Angajati: 17

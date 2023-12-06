@@ -5,7 +5,16 @@
 
 using namespace std;
 
-class Biblioteca {
+class Cladire {
+private:
+	int suprafata;
+public:
+	virtual string afiseazaInfo() = 0;
+	virtual int metoda() = 0;
+};
+
+class Biblioteca : public Cladire
+{
 private:
 	const int anInfiintare;
 	string numeBiblioteca;
@@ -15,6 +24,26 @@ private:
 	static int nrTotalCarti;
 
 public:
+
+	virtual string afiseazaInfo() {
+		string info;
+		info += "Numar angajati: " + to_string(nrAngajati);
+		info += "\nDeschis in weekend? - " + to_string(deschisaInWeekend);
+
+		return info;
+	}
+
+	virtual int metoda() {
+		int nrNouAng = 0;
+		if (deschisaInWeekend == true) {
+			nrNouAng = nrAngajati + 1;
+		}
+		else {
+			nrNouAng = nrAngajati;
+		}
+		return nrNouAng;
+	}
+
 
 	//get si set
 	string getNumeB() {
@@ -329,8 +358,15 @@ public:
 	}
 };
 
+class ResursaCulturala {
+public:
+	virtual float calcPret() = 0;
+	virtual void afiseazaInformatii() = 0;
 
-class Carte {
+	virtual ~ResursaCulturala(){}
+};
+
+class Carte : public ResursaCulturala {
 private:
 	const int idCarte;
 	char* numeCarte;
@@ -342,6 +378,14 @@ private:
 	static float TVA;
 
 public:
+	virtual float calcPret(){
+		return pretCarte + pretCarte * TVA / 100;
+	}
+
+	virtual void afiseazaInformatii() {
+		cout << "Informatii Carte: " << "\n\tNume: " << numeCarte  <<  "\n\tAutor: " << numeAutor  << "\n\tPret: " << pretCarte << endl;
+	}
+
 	//get si set
 	char* getNumeC() {
 		return numeCarte;
@@ -577,13 +621,20 @@ public:
 };
 float Carte::TVA = 0.19;
 
-class Sectiune {
+class Sectiune : public ResursaCulturala{
 private:
 	string numeSectiune;
 	int nrCarti;
 	Carte* cartiSectiune;
 	int capacitateMax;
 public:
+	virtual float calcPret() {
+		return nrCarti;
+	}
+
+	virtual void afiseazaInformatii() {
+		cout << "Sectiune: " << numeSectiune <<endl;
+	}
 	//constr 
 	Sectiune() {
 		this->numeSectiune = "Sci-Fi";
@@ -629,6 +680,10 @@ public:
 		for (int i = 0; i < nrCarti; i++) {
 			cartiSectiune[i] = cartiS[i];
 		}
+	}
+
+	Sectiune(string nume, int nrCaaarti, int capMax) : numeSectiune(nume), nrCarti(nrCarti), capacitateMax(capMax) {
+		cartiSectiune = NULL;
 	}
 
 	//copy constr
@@ -730,7 +785,7 @@ public:
 	}
 };
 
-class Angajat {
+class Angajat{
 private:
 	const int idAngajat;
 	char* nume;
@@ -741,6 +796,7 @@ private:
 	static int nrAngajati;
 
 public:
+
 	//get si set
 	char* getNume() {
 		return this->nume;
@@ -947,6 +1003,7 @@ private:
 	bool promovat;
 
 public:
+
 	//get si set
 	int getPrima() {
 		return this->prima;
@@ -1065,8 +1122,37 @@ void main() {
 	cout << "Rezultat: " << rezultat.getNrAng();
 
 	cout << endl << "--------Faza4---------" << endl;
-	//Biblioteca b9;
-	//cin >> b9;
+	Biblioteca vectBiblioteca[3];
+	for (int i = 0; i < 3; i++) {
+		cout << "Introduceti informatii biblioteca: " << i + 1 << endl;
+		//cin >> vectBiblioteca[i];
+	}
+
+	////afisare
+	//for (int i = 0; i < 3; i++) {
+	//	cout << "Afisare: " << endl << vectBiblioteca[i] << endl;
+	//}
+
+	//matrice
+	//const int nrBiblioteci = 2;
+	//const int nrAngajati = 3;
+
+	//Biblioteca matriceBiblioteci[nrBiblioteci][nrAngajati];
+	//for (int i = 0; i < nrBiblioteci; i++) {
+	//	cout << "Introduceti informatii pentru biblioteca: " << i + 1 << endl;
+	//	for (int j = 0; j < nrAngajati; j++) {
+	//		cin >> matriceBiblioteci[i][j];
+	//	}	
+	//}
+
+	////afisare
+	//for (int i = 0; i < nrBiblioteci; i++) {
+	//	for (int j = 0; j < nrAngajati; j++) {
+	//		cout << "Biblioteca " << i + 1 << ", Angajat " << j + 1 << ":" << endl;
+	//		cout << matriceBiblioteci[i][j];
+	//	}
+	//	
+	//}
 
 
 	cout << "\n-------------------CARTE-----------------------" << endl;
@@ -1119,14 +1205,11 @@ void main() {
 	cout << endl << "--------Faza4---------" << endl;
 
 	Carte c7(10, "Carte7", "Autor7", 65.99F, "Editura7", true, 550);
-	//cin >> c7;
-	//*const int nrCarti = 3;
-	//int* vecCarte = new int[4];
-	//for (int i = 0; i < nrCarti; i++) {
-	//	Carte carte;
-	//	cin >> carte;
-
-	//}*/
+	Carte vectCarti[3];
+	for (int i = 0; i < 3; i++) {
+		cout << endl << "Introduceti informatii pentru carte: " << i+1 << endl;
+		//cin >> vectCarti[i];
+	}
 
 	cout << "\n-------------------ANGAJATI--------------------" << endl;
 	cout << "--------Faza1---------" << endl;
@@ -1180,11 +1263,14 @@ void main() {
 	}
 
 	cout << endl << "--------Faza4---------" << endl;
-	Angajat a8;
-	//cin >> a8;
+	Angajat vectAngajati[3];
+	for (int i = 0; i < 3; i++) {
+		cout << endl << "Introduceti informatii pentru angajat: " << i + 1 << endl;
+		//cin >> vectAngajati[i];
+	}
 
 
-	cout << endl << "---------------------------FAZA 5 ------------------------------" << endl;
+	cout << endl << "---------------------------FAZA 5------------------------------" << endl;
 
 	Sectiune sectiune;
 	Carte c9(90, "Carte9", "Autor9", 60.99F, "Editura9", true, 300);
@@ -1209,7 +1295,7 @@ void main() {
 		cout << "Index out of range!";
 	}
 
-	cout << endl << "---------------------------FAZA 6 ------------------------------" << endl;
+	cout << endl << "---------------------------FAZA 6------------------------------" << endl;
 	cout << "--------------BIBLIOTECA-ofstream---------------" << endl;
 	Biblioteca b15(1990, "Biblioteca15", 3, varste, true);
 	ofstream file("biblioteca.txt", ios::out);
@@ -1243,7 +1329,7 @@ void main() {
 	Sectiune s2("Drama", 2, cartiSectiune, 5);
 	s2.scrieInFisierSectiune();
 
-	cout << endl << "---------------------------FAZA 7 ------------------------------" << endl;
+	cout << endl << "---------------------------FAZA 7------------------------------" << endl;
 	cout << "\n--------------ANGAJATUL LUNII---------------" << endl;
 	AngajatulLunii al1;
 	cout << "Functia angajatului lunii:" << al1.getFunctie() << endl;
@@ -1276,5 +1362,50 @@ void main() {
 	ins3 = ins1;
 	cout << endl << ins3;
 
+	cout << endl << "---------------------------FAZA 8------------------------------" << endl;
+
+	cout << "\n--------------Cladire---------------" << endl;
+
+	Biblioteca b;
+	cout << b.afiseazaInfo() << endl;
+	Cladire** angajati;
+	angajati = new Cladire*[10];
+	angajati[0] = new Biblioteca("Biblioteca1", 2, true);
+	angajati[1] = new Biblioteca("Biblioteca2", 1, true);
+	angajati[2] = new Biblioteca("Biblioteca3", 5, false);
+	angajati[3] = new Biblioteca("Biblioteca4", 7, true);
+	angajati[4] = new Biblioteca("Biblioteca5", 4, true);
+	angajati[5] = new Biblioteca("Biblioteca6", 2, false);
+	angajati[6] = new Biblioteca("Biblioteca7", 3, true);
+	angajati[7] = new Biblioteca("Biblioteca8", 2, false);
+	angajati[8] = new Biblioteca("Biblioteca9", 2, false);
+	angajati[9] = new Biblioteca("Biblioteca10", 1, true);
+	cout << "Daca biblioteca este deschisa si in weekend(1-true : 0-false), crestem nr angajatilor.\n" << endl;
+	for (int i = 0; i < 10; i++) {
+		cout << angajati[i]->afiseazaInfo();
+		cout << "\n\tNr nou angajati: " << angajati[i]->metoda() << "\n\n";
+	}
+
+
+
+	cout << "\n--------------Resursa Culturala---------------" << endl;
+
+
+	ResursaCulturala** pointeri;
+	pointeri = new ResursaCulturala*[10];
+	pointeri[0] = new Carte(1, "Harry Potter 1", "J.K.Rolling", 150, "Ping", true, 700);
+	pointeri[1] = new Sectiune("Sci-Fi",  2, 10);
+	pointeri[2] = new Carte(2, "Lord of the rings", "R.R.Tolkien", 250, "Pingus", true, 800);
+	pointeri[3] = new Sectiune("Sci-Fi", 2, 10);
+	pointeri[4] = new Carte(3, "Idiotul", "Dostoievski", 100, "Ping", true, 700);
+	pointeri[5] = new Sectiune("Literatura clasica", 3, 10);
+	pointeri[6] = new Carte(4, "Ion", "Liviu Rebreanu", 70, "Ping", true, 500);
+	pointeri[7] = new Sectiune("Literatura clasica", 3, 10);
+	pointeri[8] = new Carte(5, "Maitreyi", "Mircea Eliade", 80, "Ping", true, 350);
+	pointeri[9] = new Sectiune("Literatura clasica", 3, 10);
+	cout << "INFORMATII: " << endl;
+	for (int i = 0; i < 10; i++) {
+		pointeri[i]->afiseazaInformatii();
+	}
 
 }
